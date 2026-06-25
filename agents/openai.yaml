@@ -1,0 +1,4 @@
+interface:
+  display_name: "Candidate Fit Review (CFR)"
+  short_description: "Review whether a candidate is necessary for a target system."
+  default_prompt: "Use $candidate-fit-review to judge necessity-first whether candidate A should be introduced into target B."
