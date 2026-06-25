@@ -1,3 +1,6 @@
+<!-- Language switch -->
+**English** | [中文](./README.zh.md)
+
 # candidate-fit-review
 
 **A necessity-first review for deciding whether a candidate mechanism belongs in a system.**
