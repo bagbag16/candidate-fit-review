@@ -14,15 +14,15 @@
 
 ```mermaid
 flowchart TD
-  A["Candidate A"] --> P["Problem claim"]
-  B["Target B"] --> C["Current coverage"]
-  P --> G["Occam necessity gate"]
+  A["候选机制 A"] --> P["问题主张"]
+  B["目标系统 B"] --> C["当前覆盖情况"]
+  P --> G["奥卡姆必要性闸门"]
   C --> G
-  G -->|"没有真实未覆盖失败"| R["Do not absorb"]
-  G -->|"有用但不应操作化"| K["Keep as reference"]
-  G -->|"需要证据"| P2["Pilot"]
-  G -->|"必要且有边界"| I["Absorb minimum atom"]
-  I --> O["Owner / trigger / rollback"]
+  G -->|"没有真实未覆盖失败"| R["不吸收"]
+  G -->|"有用但不应操作化"| K["仅保留为参考"]
+  G -->|"需要证据"| P2["小范围试点"]
+  G -->|"必要且有边界"| I["吸收最小原子"]
+  I --> O["负责人 / 触发条件 / 回滚方式"]
 ```
 
 > **设计立场:** 这不是功能巡礼,而是关于必要性、适配度、成本,以及最小可评估变更单元的
