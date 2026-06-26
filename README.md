@@ -3,143 +3,65 @@
 
 # candidate-fit-review
 
-**A necessity-first review for deciding whether a candidate mechanism belongs in a system.**
+**Decide whether a proposed mechanism actually belongs in a target system.**
 
-Good mechanisms are still bad additions when they solve no real problem. Teams
-often absorb a rule, workflow, abstraction, or framework because it is polished,
-popular, or locally useful somewhere else. The result is more vocabulary, more
-maintenance, and less clarity about which mechanism is actually responsible for
-which failure.
+`candidate-fit-review` is for one decision: should candidate A be absorbed into target B? It does not summarize A, sell A, or reward novelty. It asks whether B has a real uncovered failure, whether A is necessary, and what the smallest reversible integration would be.
 
-`candidate-fit-review` is a skill for judging whether candidate A should enter
-target B. It starts from the failure B needs to prevent, then asks whether A is
-necessary, whether existing coverage already handles the failure, and what the
-smallest reversible integration point would be.
+Use it before adding a rule, workflow, abstraction, checklist, skill, process, or governance layer to an existing system.
 
 ```mermaid
 flowchart TD
-  A["Candidate A"] --> P["Problem claim"]
-  B["Target B"] --> C["Current coverage"]
-  P --> G["Occam necessity gate"]
+  A["Candidate mechanism"] --> P["What failure does it claim to prevent?"]
+  B["Target system"] --> C["What already covers that failure?"]
+  P --> G["Necessity gate"]
   C --> G
-  G -->|"no real uncovered failure"| R["Do not absorb"]
+  G -->|"no uncovered failure"| R["Reject"]
   G -->|"useful but not operational"| K["Keep as reference"]
-  G -->|"needs evidence"| P2["Pilot"]
-  G -->|"needed + bounded"| I["Absorb minimum atom"]
+  G -->|"evidence missing"| T["Pilot"]
+  G -->|"needed and bounded"| I["Absorb minimum atom"]
   I --> O["Owner / trigger / rollback"]
 ```
 
-> **Design stance:** the review is not a feature tour. It is a decision about
-> necessity, fit, cost, and the smallest atomic change that can be evaluated.
+## The Test
 
-<details>
-<summary>Table of contents</summary>
+A candidate is worth absorbing only when all three statements are true:
 
-- [The problem](#the-problem)
-- [Why this exists](#why-this-exists)
-- [How it works](#how-it-works)
-- [Quick start](#quick-start)
-- [Core concepts](#core-concepts)
-- [Recommendation outcomes](#recommendation-outcomes)
-- [When to use it - and when not to](#when-to-use-it---and-when-not-to)
+1. The target has a concrete failure the current system does not handle.
+2. The candidate handles that failure better than a simpler local fix.
+3. The integration can be bounded, owned, triggered, and rolled back.
 
-</details>
+If any statement fails, the answer should be no, reference-only, or pilot-first.
 
----
+## Review Output
 
-## The problem
+The review ends with one recommendation:
 
-Absorption decisions fail when the review starts with the attractiveness of A
-instead of the actual need inside B:
+| Outcome | Meaning |
+| --- | --- |
+| Do not absorb | No real uncovered failure or the cost is unjustified |
+| Keep as reference | Useful idea, but not a rule or workflow yet |
+| Pilot | Promising, but needs evidence under real conditions |
+| Absorb minimum atom | Add the smallest useful piece with owner and rollback |
+| Replace existing mechanism | Use only when the candidate clearly dominates current coverage |
 
-- A is good, but B has no recurring failure that requires it;
-- A duplicates an existing mechanism and creates two sources of truth;
-- A solves a speculative future issue but adds current maintenance cost;
-- a whole framework is imported when one small rule or check would be enough;
-- old mechanisms are removed before their dependents are understood.
-
-`candidate-fit-review` keeps the decision grounded in real failures, current
-coverage, and minimum necessary change.
-
-## Why this exists
-
-Most fit reviews ask:
-
-> *Is this candidate good?*
-
-This skill asks a stricter question:
-
-> *What makes any change necessary for the target, and is this candidate the
-> smallest clear way to cover that need?*
-
-That framing keeps Occam's razor from becoming a shallow "smaller diff is
-always better" rule. The correct change is the one that removes unnecessary
-entities while still solving the real problem.
-
-## How it works
-
-The review follows a fixed decision path:
-
-1. Define candidate A and target B.
-2. Name the concrete failure B needs to prevent.
-3. Check whether the failure is real, recurring, high-impact, or likely enough.
-4. Inspect B's current coverage and dependents.
-5. Compare A against simpler alternatives.
-6. Decide the minimum atom: reference, pilot, rule, workflow step, checker,
-   adapter, replacement, or no change.
-7. State the recommendation with confidence and residual risk.
-
-The conclusion is allowed to be weak when inputs are weak. It should not pretend
-that missing definitions are known.
-
-## Quick start
-
-Use the skill when evaluating absorption:
+## Quick Start
 
 ```text
-Use candidate-fit-review to judge whether mechanism A should be introduced into
-system B. Start from the failure B needs to prevent, then recommend whether to
-reject, keep as reference, pilot, absorb, or replace something.
+Use candidate-fit-review. Candidate A is [mechanism]. Target B is [system]. Decide whether B should absorb A, and if yes, identify the smallest safe integration point.
 ```
 
-Useful inputs:
+Expected answer:
 
-- candidate A;
-- target B;
-- the observed failure or motivation;
-- current mechanisms in B;
-- expected owner or reader;
-- constraints, costs, and downstream dependents.
+- the real problem claim;
+- current coverage in B;
+- benefit, cost, and overlap;
+- simpler alternatives;
+- final recommendation and rollback path.
 
-## Core concepts
+## When Not To Use It
 
-| Concept | Meaning |
-| --- | --- |
-| Necessity gate | A change must prevent a real uncovered failure |
-| Current coverage | What B already does before A is introduced |
-| Minimum atom | The smallest independently evaluable unit worth adding |
-| Hidden cost | Explanation, maintenance, conflict, and memory burden |
-| Reference-only | Useful background that should not become procedure or state |
-| Chesterton check | Do not remove an existing mechanism before understanding why it exists |
+Do not use this skill for general product research, feature comparison, or implementation planning after the decision has already been made. It is a fit review, not a build plan.
 
-## Recommendation outcomes
+## License
 
-| Outcome | Use when |
-| --- | --- |
-| Do not absorb | A adds vocabulary or completeness without a real uncovered failure |
-| Keep as reference | A is useful context but should not govern execution |
-| Pilot | The need is plausible but evidence or ownership is not mature |
-| Absorb minimum atom | A covers a real gap and can enter as a bounded unit |
-| Replace | A clearly supersedes an existing mechanism after dependents are understood |
-
-## When to use it - and when not to
-
-**Use `candidate-fit-review` when you are thinking:**
-
-- "Should we absorb this rule, workflow, or design?"
-- "Is this new mechanism actually necessary?"
-- "Should this be a formal process, a reference, or nothing?"
-- "What is the smallest reversible way to introduce this?"
-
-**Do not use it** for immediate implementation, open-ended brainstorming,
-simple summaries, or cases where there is no concrete candidate and target.
+MIT.
